@@ -1,0 +1,1093 @@
+<!--
+  ============================================================
+  울루루 튜토리얼 (초등 중학년용)  /  index.html  단일 파일
+  ============================================================
+  이 파일 하나만 있으면 동작합니다.
+  외부 CSS / JS / 이미지 / 폰트 / 인터넷 연결이 전혀 필요 없습니다.
+  (HTML + CSS + JavaScript + SVG 그림이 모두 이 안에 들어 있습니다.)
+
+  [GitHub Pages 배포 방법]
+  1) GitHub 에서 새 저장소(repository) 만들기 - Public 으로
+  2) Add file > Upload files 로 이 index.html 하나만 업로드 후 Commit
+  3) Settings > Pages 이동
+  4) Source: Deploy from a branch
+     Branch: main  /  (root)  -> Save
+  5) 1~2분 뒤 접속
+     https://[내아이디].github.io/[저장소이름]/
+
+  [수업에서 쓰는 방법]
+  - 태블릿/스마트폰 브라우저로 위 주소 접속
+  - 주소를 QR코드로 만들어 칠판에 띄우면 학생 배포가 쉽습니다
+  - 홈 화면에 추가하면 앱처럼 전체화면으로 실행됩니다
+
+  [화면 구성]
+  홈 / 튜토리얼 8단계 / 규칙 한눈에 보기 / 실전 연습 / 선생님·부모님 가이드
+
+  [조작]
+  둥지의 새를 톡 누르고 -> 앉힐 자리를 톡 누릅니다 (드래그 없음)
+  앉은 새를 누르면 다시 들 수 있고, 다른 새와 자리 교체도 됩니다
+
+  [안내]
+  실제 보드게임의 소원카드는 그림 기호이며 판본마다 구성이 다릅니다.
+  이 앱은 저작권과 학생 이해도를 고려해 조건을 글로 바꾼 연습용입니다.
+  (자리번호 / 옆자리 / 마주보기 / 떨어져앉기 / 홀짝 5종)
+  규칙의 핵심(모래시계 동시 배치, 실패 1마리당 벌점 1점,
+  못 놓은 새 최대 2점, 6라운드 최저 벌점 승리)은 원작과 같습니다.
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ffd93d">
+<meta name="description" content="보드게임 울루루를 초등학생이 쉽게 배우는 튜토리얼 웹앱">
+<title>울루루 튜토리얼 - 새들의 소원을 들어줘!</title>
+<style>
+:root{
+  --ink:#2b2140; --paper:#ffffff;
+  --sun:#ffd93d; --org:#ff9f1c; --rock:#ff7a3d;
+  --grn:#4cc97a; --sky:#45b8e8; --pnk:#ff7fb6; --pur:#a66bf0; --red:#ff5a5f;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Segoe UI",sans-serif;
+  color:var(--ink); background:#ffe9b0;
+  background-image:linear-gradient(180deg,#ffeeb5 0%,#ffd7a8 45%,#ffc2d1 100%);
+  background-attachment:fixed;
+  -webkit-text-size-adjust:100%; user-select:none; min-height:100vh; line-height:1.5;
+}
+.app{max-width:580px;margin:0 auto;padding:10px 14px 130px}
+h1,h2,h3{margin:0 0 8px}
+p{margin:0 0 10px}
+
+/* ---------- 공통 부품 ---------- */
+.card{background:var(--paper);border-radius:22px;padding:16px;margin:0 0 12px;
+  box-shadow:0 5px 0 rgba(0,0,0,.09)}
+.card.warm{background:#fffaf0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:58px;padding:10px 18px;border:0;border-radius:18px;
+  font-family:inherit;font-size:19px;font-weight:800;color:#fff;background:var(--sky);
+  box-shadow:0 4px 0 rgba(0,0,0,.2);cursor:pointer;width:100%}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+.btn.lg{min-height:68px;font-size:22px}
+.btn.green{background:var(--grn)} .btn.org{background:var(--org)}
+.btn.pink{background:var(--pnk)} .btn.pur{background:var(--pur)}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.12);border:3px solid #eee}
+.btn[disabled]{opacity:.45}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.big{font-size:19px}
+.lead{font-size:20px;font-weight:800;line-height:1.45}
+.muted{color:#7b7390;font-size:15px}
+.pill{display:inline-block;background:var(--sun);border-radius:999px;padding:3px 12px;
+  font-size:14px;font-weight:800;color:#5b4a00;margin-bottom:8px}
+.emoji{font-size:1.25em}
+
+/* ---------- 헤더 ---------- */
+.top{display:flex;align-items:center;gap:10px;padding:6px 2px 10px}
+.home-btn{width:52px;height:52px;border-radius:16px;border:0;background:#fff;
+  font-size:24px;box-shadow:0 3px 0 rgba(0,0,0,.12);cursor:pointer}
+.bar{flex:1;height:16px;border-radius:999px;background:rgba(255,255,255,.75);overflow:hidden}
+.bar>i{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,var(--sun),var(--rock));transition:width .3s}
+.step-no{font-weight:900;font-size:16px;background:#fff;border-radius:999px;padding:4px 12px}
+
+/* ---------- 보드 ---------- */
+.board{position:relative;width:min(90vw,420px);aspect-ratio:1/1;margin:14px auto 10px}
+.rock{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:40%;aspect-ratio:1/1;border-radius:50%;display:grid;place-items:center;
+  text-align:center;color:#fff;font-weight:900;font-size:15px;line-height:1.2;
+  background:radial-gradient(circle at 35% 28%,#ffa366,#dd4e18);
+  box-shadow:inset 0 -8px 14px rgba(0,0,0,.22)}
+.seat{position:absolute;transform:translate(-50%,-50%);width:23%;height:23%;padding:0;
+  border-radius:50%;border:4px dashed #c89a63;background:#fff8e7;
+  display:grid;place-items:center;cursor:pointer}
+.seat .num{position:absolute;top:-6px;left:-6px;width:26px;height:26px;border-radius:50%;
+  background:var(--ink);color:#fff;font-size:14px;font-weight:900;display:grid;place-items:center}
+.seat .bird{width:78%;height:78%}
+.seat.filled{border-style:solid;border-color:#8ad6a4;background:#fff}
+.seat.ok{border-color:#2ecc71;border-style:solid;box-shadow:0 0 0 6px rgba(46,204,113,.35)}
+.seat.bad{border-color:var(--red);border-style:solid;box-shadow:0 0 0 6px rgba(255,90,95,.3)}
+.seat.pick{box-shadow:0 0 0 7px rgba(255,159,28,.45)}
+.seat .mk{position:absolute;bottom:-8px;right:-6px;font-size:20px}
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(.7)}100%{transform:translate(-50%,-50%) scale(1)}}
+.seat.anim{animation:pop .2s}
+
+/* ---------- 새 둥지(트레이) ---------- */
+.nest{background:#fff6e2;border:4px dashed #e0bc84;border-radius:20px;padding:10px;margin-bottom:10px}
+.nest h3{font-size:16px;margin:0 0 8px;text-align:center}
+.tray{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{width:66px;height:72px;border-radius:18px;border:3px solid #eee;background:#fff;
+  padding:2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.chip .bird{width:42px;height:42px}
+.chip span{font-size:12px;font-weight:800}
+.chip.sel{border-color:var(--org);background:#fff6e6;transform:translateY(-4px);
+  box-shadow:0 6px 0 rgba(255,159,28,.4)}
+.chip.used{opacity:.3}
+
+/* ---------- 소원카드 ---------- */
+.wishlist{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px}
+.wish{display:flex;align-items:center;gap:10px;background:#fff;border:3px solid #f0e6d2;
+  border-radius:16px;padding:8px 10px;font-size:16px;font-weight:700}
+.wish .bird{width:38px;height:38px;flex:none}
+.wish .tx{flex:1}
+.wish .mk{font-size:22px;width:28px;text-align:center}
+.wish.ok{border-color:var(--grn);background:#f1fff6}
+.wish.bad{border-color:var(--red);background:#fff4f4}
+
+/* ---------- 퀴즈 ---------- */
+.quiz{background:#fff;border-radius:20px;padding:14px;margin:0 0 12px;box-shadow:0 5px 0 rgba(0,0,0,.09)}
+.quiz .q{font-size:18px;font-weight:800;margin-bottom:10px}
+.opt{display:block;width:100%;text-align:left;font-family:inherit;font-size:18px;font-weight:700;
+  padding:14px;margin-bottom:8px;border-radius:16px;border:3px solid #ececf4;background:#fafaff;
+  color:var(--ink);min-height:56px;cursor:pointer}
+.opt:active{transform:translateY(2px)}
+.opt.correct{background:#e9fff1;border-color:var(--grn)}
+.opt.wrong{background:#fff0f0;border-color:var(--red)}
+.opt[disabled]{cursor:default}
+.fb{font-size:16px;font-weight:700;border-radius:14px;padding:10px;margin-top:4px}
+.fb.good{background:#e9fff1;color:#176b3a}
+.fb.nope{background:#fff0f0;color:#9b2226}
+
+/* ---------- 결과/타이머 ---------- */
+.result{font-size:18px;font-weight:800;border-radius:18px;padding:14px;margin-top:4px;text-align:center}
+.result.good{background:#e9fff1;color:#176b3a;border:3px solid var(--grn)}
+.result.so{background:#fff8e2;color:#7a5a00;border:3px solid var(--sun)}
+.glass{height:20px;border-radius:999px;background:#f0ecf7;overflow:hidden;margin:6px 0 10px}
+.glass>i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--sun),var(--rock))}
+.timeline{display:flex;align-items:center;gap:8px;font-weight:800}
+
+/* ---------- 목록/표 ---------- */
+ul.k{margin:0;padding-left:22px;font-size:17px}
+ul.k li{margin-bottom:7px}
+.kv{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.kv .ic{width:44px;height:44px;flex:none;border-radius:14px;display:grid;place-items:center;
+  font-size:22px;background:#fff3d6}
+.sub{font-size:15px;color:#6f6786}
+
+/* ---------- 하단 내비 ---------- */
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);
+  border-top:4px solid var(--sun);padding:10px 14px calc(12px + env(safe-area-inset-bottom))}
+.nav .in{max-width:580px;margin:0 auto;display:flex;gap:10px}
+.nav .in>*{flex:1}
+.hide{display:none !important}
+.center{text-align:center}
+.toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);
+  background:var(--ink);color:#fff;padding:12px 18px;border-radius:999px;font-weight:800;
+  font-size:16px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50;max-width:90vw;text-align:center}
+.toast.on{opacity:.95}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ 홈 ============ -->
+  <section id="home">
+    <div class="center" style="padding:18px 0 6px">
+      <div style="font-size:62px;line-height:1">&#128038;&#127956;</div>
+      <h1 style="font-size:34px;margin-top:6px">울루루</h1>
+      <p class="lead">꿈꾸는 새 8마리의<br>소원을 들어주는 게임!</p>
+      <p class="muted">초등학생을 위한 쉬운 튜토리얼</p>
+    </div>
+    <div class="card">
+      <button class="btn lg green" onclick="startTutor()">&#9654; 튜토리얼 시작하기</button>
+      <div style="height:10px"></div>
+      <button class="btn org" onclick="show('rules')">&#128214; 규칙 한눈에 보기</button>
+      <div style="height:10px"></div>
+      <button class="btn pur" onclick="show('practice')">&#127919; 실전 연습만 하기</button>
+      <div style="height:10px"></div>
+      <button class="btn ghost" onclick="show('teacher')">&#129489;&#8205;&#127979; 선생님 &middot; 부모님 가이드</button>
+    </div>
+    <p class="muted center">8단계, 약 10분이면 끝나요.</p>
+  </section>
+
+  <!-- ============ 튜토리얼 ============ -->
+  <section id="tutor" class="hide">
+    <div class="top">
+      <button class="home-btn" onclick="show('home')" aria-label="홈으로">&#127968;</button>
+      <div class="bar"><i id="pbar"></i></div>
+      <div class="step-no"><span id="pnum">1</span>/8</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step" data-t="어떤 게임일까?">
+      <div class="card">
+        <span class="pill">1단계 &middot; 게임 소개</span>
+        <h2>어떤 게임일까요?</h2>
+        <p class="big">커다란 바위 <b>울루루</b> 주변에, 꿈꾸는 새 <b>8마리</b>가 춤을 추러 모였어요.</p>
+        <p class="big">새들은 저마다 <b>앉고 싶은 자리</b>가 있어요. 그걸 적어 놓은 것이 <b>소원카드</b>예요.</p>
+        <p class="big">우리가 할 일은 하나! <b>새들을 소원대로 앉혀 주기</b>&nbsp;&#128079;</p>
+      </div>
+      <div class="card warm">
+        <div class="kv"><div class="ic">&#9201;</div><div><b>모두 동시에!</b><div class="sub">순서를 기다리지 않아요. 모래시계를 뒤집으면 모든 사람이 자기 판에서 한꺼번에 새를 놓아요.</div></div></div>
+        <div class="kv"><div class="ic">&#128148;</div><div><b>점수는 "벌점"</b><div class="sub">소원을 못 들어주면 벌점을 받아요. 그래서 <b>벌점이 가장 적은 사람이 1등</b>이에요.</div></div></div>
+        <div class="kv"><div class="ic">&#128260;</div><div><b>6번 반복</b><div class="sub">소원카드를 바꿔서 6라운드를 하고, 벌점을 모두 더해요.</div></div></div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step hide" data-t="게임 준비물">
+      <div class="card">
+        <span class="pill">2단계 &middot; 준비물</span>
+        <h2>무엇이 들어 있나요?</h2>
+        <div class="kv"><div class="ic">&#127956;</div><div><b>울루루 판</b><div class="sub">가운데에 큰 바위, 그 주위를 빙 둘러 <b>자리 8칸</b>이 있어요. 사람마다 판을 하나씩 가져요.</div></div></div>
+        <div class="kv"><div class="ic">&#128038;</div><div><b>꿈꾸는 새 8마리</b><div class="sub">색이 모두 달라요. 자리도 8칸이니까 <b>한 칸에 한 마리씩, 딱 맞게</b> 앉아요.</div></div></div>
+        <div class="kv"><div class="ic">&#127183;</div><div><b>소원카드</b><div class="sub">"누구 옆에 앉고 싶어", "누구와 마주보고 싶어" 처럼 새의 소원이 그림으로 적혀 있어요.</div></div></div>
+        <div class="kv"><div class="ic">&#8987;</div><div><b>모래시계</b><div class="sub">새를 놓을 수 있는 시간을 재요.</div></div></div>
+        <div class="kv"><div class="ic">&#128148;</div><div><b>벌점 토큰</b><div class="sub">소원을 못 들어줬을 때 받아요. 적게 받는 게 좋아요!</div></div></div>
+      </div>
+      <div class="card warm">
+        <h3>&#128038; 8마리 새 친구들</h3>
+        <div class="tray" id="birdShow"></div>
+        <p class="muted center" style="margin-top:8px">이 앱에서는 새를 이렇게 색으로 보여 줘요.</p>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step hide" data-t="자리 이름 익히기">
+      <div class="card">
+        <span class="pill">3단계 &middot; 자리 익히기</span>
+        <h2>자리 말을 배워 볼까요?</h2>
+        <div class="kv"><div class="ic">&#128100;</div><div><b>옆자리</b><div class="sub">바로 붙어 있는 <b>왼쪽 칸과 오른쪽 칸</b>이에요. 옆자리는 항상 2곳!</div></div></div>
+        <div class="kv"><div class="ic">&#128065;</div><div><b>마주보는 자리</b><div class="sub">바위를 가로질러 <b>정반대편</b> 칸이에요. 자기 번호에 <b>+4</b>를 하면 찾을 수 있어요. (8을 넘으면 8을 빼요)</div></div></div>
+        <div class="kv"><div class="ic">&#128175;</div><div><b>홀수 자리 / 짝수 자리</b><div class="sub">홀수는 1 &middot; 3 &middot; 5 &middot; 7번, 짝수는 2 &middot; 4 &middot; 6 &middot; 8번이에요.</div></div></div>
+      </div>
+      <div class="card">
+        <h3 id="sqTitle">문제</h3>
+        <p class="muted" id="sqSub">자리를 눌러서 맞혀 보세요.</p>
+        <div id="sqBoard"></div>
+        <div id="sqFb" class="fb good hide"></div>
+        <button class="btn ghost" onclick="SQ.reset()">&#128260; 다시 풀기</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step hide" data-t="소원카드 읽기">
+      <div class="card">
+        <span class="pill">4단계 &middot; 소원카드</span>
+        <h2>소원카드 읽는 법</h2>
+        <p class="big">소원카드는 새가 <b>어디에 앉고 싶은지</b> 알려 줘요. 이 앱에는 5가지 소원이 나와요.</p>
+        <div class="wishlist" id="wishKinds"></div>
+        <p class="muted">실제 게임 카드는 그림으로 되어 있어요. 이 앱은 글씨로 쉽게 바꾼 연습용이지만, <b>생각하는 방법은 똑같아요.</b></p>
+      </div>
+      <div id="quizCards"></div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step hide" data-t="새 놓기 연습">
+      <div class="card">
+        <span class="pill">5단계 &middot; 첫 연습</span>
+        <h2>새 3마리로 연습해요</h2>
+        <p class="big">&#9312; 둥지에서 새를 <b>톡!</b> 누르고 &#9313; 앉히고 싶은 <b>자리를 톡!</b> 누르면 앉아요.</p>
+        <p class="muted">앉은 새를 다시 누르면 들어서 옮길 수 있어요. 둥지의 흐린 새를 누르면 둥지로 돌아와요.</p>
+      </div>
+      <div id="prac1"></div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step hide" data-t="벌점 계산하기">
+      <div class="card">
+        <span class="pill">6단계 &middot; 벌점</span>
+        <h2>벌점은 이렇게!</h2>
+        <div class="kv"><div class="ic">&#10060;</div><div><b>소원을 못 들어준 새 &rarr; 1점</b><div class="sub">새 한 마리마다 벌점 1점씩 받아요.</div></div></div>
+        <div class="kv"><div class="ic">&#8987;</div><div><b>시간이 끝났는데 못 놓은 새 &rarr; 1점</b><div class="sub">둥지에 남은 새도 벌점 1점!</div></div></div>
+        <div class="kv"><div class="ic">&#128165;</div><div><b>못 놓은 새는 최대 2점</b><div class="sub">판에 놓지 못하면 소원도 못 이룬 거니까, <b>1점 + 1점 = 2점</b>이 돼요.</div></div></div>
+        <div class="kv"><div class="ic">&#127942;</div><div><b>6라운드 벌점을 모두 더해서, 가장 적은 사람이 1등!</b><div class="sub">점수가 낮을수록 잘한 거예요.</div></div></div>
+      </div>
+      <div id="quizScore"></div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step hide" data-t="실전처럼 해보기">
+      <div class="card">
+        <span class="pill">7단계 &middot; 실전</span>
+        <h2>이번엔 새 5마리!</h2>
+        <p class="big">소원 5개를 모두 들어줘서 <b>벌점 0점</b>을 만들어 보세요.</p>
+        <p class="muted">자신 있으면 모래시계(시간 재기)도 켜 보세요. 천천히 해도 괜찮아요!</p>
+      </div>
+      <div id="prac2"></div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step hide" data-t="정리하기">
+      <div class="card">
+        <span class="pill">8단계 &middot; 정리</span>
+        <h2>&#127881; 다 배웠어요!</h2>
+        <ul class="k">
+          <li>울루루는 <b>새 8마리의 소원대로 자리를 찾아주는</b> 게임이에요.</li>
+          <li>소원카드 8장을 펼치고, <b>모래시계를 뒤집으면 모두 동시에</b> 새를 놓아요.</li>
+          <li>시간이 끝나면 <b>흰 새부터 차례로</b> 소원이 이루어졌는지 확인해요.</li>
+          <li>소원을 못 이룬 새 1마리마다 <b>벌점 1점</b>, 못 놓은 새는 <b>최대 2점</b>이에요.</li>
+          <li><b>6라운드</b>를 하고, 벌점 합이 <b>가장 적은 사람이 승리</b>!</li>
+        </ul>
+      </div>
+      <div class="card warm center">
+        <h3>내 퀴즈 점수</h3>
+        <div id="finalScore" style="font-size:34px;font-weight:900">0 / 0</div>
+        <p class="muted" id="finalMsg">퀴즈를 풀면 점수가 나와요.</p>
+      </div>
+      <div class="card">
+        <button class="btn green" onclick="show('practice')">&#127919; 실전 연습 더 하기</button>
+        <div style="height:10px"></div>
+        <button class="btn org" onclick="show('rules')">&#128214; 규칙 한눈에 보기</button>
+        <div style="height:10px"></div>
+        <button class="btn ghost" onclick="show('home')">&#127968; 처음 화면으로</button>
+      </div>
+    </div>
+
+    <div class="nav">
+      <div class="in">
+        <button class="btn ghost" id="prevBtn" onclick="go(-1)">&#9664; 이전</button>
+        <button class="btn green" id="nextBtn" onclick="go(1)">다음 &#9654;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 규칙 한눈에 ============ -->
+  <section id="rules" class="hide">
+    <div class="top">
+      <button class="home-btn" onclick="show('home')" aria-label="홈으로">&#127968;</button>
+      <h2 style="margin:0">규칙 한눈에 보기</h2>
+    </div>
+    <div class="card">
+      <h3>&#127919; 목표</h3>
+      <p class="big">새들의 소원을 최대한 많이 들어주어 <b>벌점을 적게</b> 받기. 6라운드 합계가 가장 적은 사람이 승리!</p>
+    </div>
+    <div class="card">
+      <h3>&#128221; 한 라운드 순서</h3>
+      <ul class="k">
+        <li><b>소원카드 펼치기</b> &ndash; 카드 8장을 뽑아, 판 가운데의 새 색깔 칸마다 한 장씩 올려놓아요.</li>
+        <li><b>동시에 새 놓기</b> &ndash; 모래시계를 뒤집으면 모두 자기 판에 새 8마리를 놓아요. 모래가 다 떨어지면 손을 떼요.</li>
+        <li><b>확인하기</b> &ndash; 카드를 차례로 보면서 소원이 이루어졌는지 확인해요.</li>
+        <li><b>벌점 받기</b> &ndash; 소원 실패 1점, 못 놓은 새 1점(합쳐서 최대 2점).</li>
+        <li><b>다음 라운드</b> &ndash; 카드를 버리고 새 카드 8장을 펼쳐요.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>&#129518; 소원 종류 (이 앱 버전)</h3>
+      <div class="wishlist" id="wishKinds2"></div>
+    </div>
+    <div class="card warm">
+      <h3>&#128161; 잘하는 꿀팁</h3>
+      <ul class="k">
+        <li><b>자리가 딱 정해진 소원</b>(몇 번 자리, 마주보기)부터 먼저 놓아요.</li>
+        <li>여러 곳이 가능한 소원(옆자리, 떨어져 앉기)은 <b>나중에</b> 놓아요.</li>
+        <li>다 못 하겠으면, 포기하고 <b>될 수 있는 것부터</b> 놓는 게 벌점이 적어요.</li>
+        <li>시간이 끝나기 전에 <b>남은 새는 아무 데나라도 놓기!</b> (못 놓으면 2점)</li>
+      </ul>
+    </div>
+    <div class="nav"><div class="in"><button class="btn ghost" onclick="show('home')">&#127968; 홈으로</button></div></div>
+  </section>
+
+  <!-- ============ 실전 연습 ============ -->
+  <section id="practice" class="hide">
+    <div class="top">
+      <button class="home-btn" onclick="show('home')" aria-label="홈으로">&#127968;</button>
+      <h2 style="margin:0">실전 연습</h2>
+    </div>
+    <div class="card">
+      <p class="big">버튼을 누르면 <b>새 문제</b>가 나와요. 벌점 0점에 도전!</p>
+      <div class="row">
+        <button class="btn org" onclick="newGame('easy')">&#128038; 쉬움 (4마리)</button>
+        <button class="btn pink" onclick="newGame('hard')">&#128293; 어려움 (6마리)</button>
+      </div>
+    </div>
+    <div id="prac3"></div>
+    <div class="nav"><div class="in"><button class="btn ghost" onclick="show('home')">&#127968; 홈으로</button></div></div>
+  </section>
+
+  <!-- ============ 선생님 가이드 ============ -->
+  <section id="teacher" class="hide">
+    <div class="top">
+      <button class="home-btn" onclick="show('home')" aria-label="홈으로">&#127968;</button>
+      <h2 style="margin:0">선생님 &middot; 부모님 가이드</h2>
+    </div>
+    <div class="card">
+      <h3>이 앱의 목적</h3>
+      <p>보드게임 <b>울루루(Uluru)</b>의 기본 규칙과 공간 추론 방법을 초등 중학년 수준에서 익히도록 만든 튜토리얼입니다. 8단계(약 10분) 뒤 바로 실물 게임을 진행할 수 있습니다.</p>
+    </div>
+    <div class="card">
+      <h3>수업 활용 흐름 (40분 기준)</h3>
+      <ul class="k">
+        <li>0~10분: 앱 튜토리얼 1~8단계 개별 진행</li>
+        <li>10~15분: 실물 게임 준비물 확인, 판 나누기</li>
+        <li>15~35분: 2~3라운드 실제 플레이 (처음엔 시간 제한 없이)</li>
+        <li>35~40분: 벌점 합계, "어떻게 생각했는지" 발표</li>
+      </ul>
+    </div>
+    <div class="card warm">
+      <h3>꼭 알아두실 점</h3>
+      <ul class="k">
+        <li>실제 게임의 소원카드는 <b>그림 기호</b>로 되어 있고 판본에 따라 종류가 조금씩 다릅니다. 이 앱은 저작권과 이해도를 고려해 카드를 <b>글씨 조건(번호 &middot; 옆자리 &middot; 마주보기 &middot; 떨어져 앉기 &middot; 홀짝)</b>으로 바꾼 연습용입니다.</li>
+        <li>새의 색 이름도 앱에서 단순화했습니다. 실제 구성물과 1:1로 같지 않을 수 있으니, 수업 때는 <b>"조건을 읽고 자리를 찾는 방법"</b>에 초점을 맞춰 주세요.</li>
+        <li>처음 하는 학급은 <b>모래시계를 쓰지 않고</b> 2라운드 정도 연습한 뒤 시간 제한을 넣는 것을 권합니다.</li>
+        <li>교과 연계: 수학 &lsquo;위치와 방향&rsquo;, &lsquo;규칙 찾기&rsquo;, 홀수 &middot; 짝수 개념과 연결하기 좋습니다.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>자주 나오는 질문</h3>
+      <ul class="k">
+        <li><b>자리가 모자라지 않나요?</b> 새 8마리 &middot; 자리 8칸이라 한 칸에 한 마리씩 꽉 채워 앉습니다.</li>
+        <li><b>소원이 서로 부딪히면요?</b> 일부러 모두 이룰 수 없게 나오기도 합니다. 그때는 <b>가장 적게 실패하는 방법</b>을 찾는 것이 핵심 사고 활동입니다.</li>
+        <li><b>동점이면요?</b> 공동 우승으로 처리합니다.</li>
+      </ul>
+    </div>
+    <div class="nav"><div class="in"><button class="btn ghost" onclick="show('home')">&#127968; 홈으로</button></div></div>
+  </section>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   울루루 튜토리얼 - 데이터
+   ========================================================= */
+var BIRDS = {
+  red:{n:"빨강", c:"#FF5A5F"},
+  org:{n:"주황", c:"#FF9F1C"},
+  yel:{n:"노랑", c:"#FFD93D"},
+  grn:{n:"초록", c:"#4CC97A"},
+  sky:{n:"하늘", c:"#45B8E8"},
+  blu:{n:"파랑", c:"#3C6FF5"},
+  pur:{n:"보라", c:"#A66BF0"},
+  pnk:{n:"분홍", c:"#FF7FB6"}
+};
+var ORDER = ["red","org","yel","grn","sky","blu","pur","pnk"];
+
+function birdSvg(id, cls){
+  var b = BIRDS[id];
+  return '<svg class="bird ' + (cls||"") + '" viewBox="0 0 48 48" style="color:' + b.c + '" aria-hidden="true">'
+    + '<polygon points="10,26 1,19 7,34" fill="currentColor" stroke="rgba(0,0,0,.2)" stroke-width="1.4"/>'
+    + '<ellipse cx="21" cy="31" rx="14" ry="11.5" fill="currentColor" stroke="rgba(0,0,0,.2)" stroke-width="1.4"/>'
+    + '<circle cx="32" cy="17" r="9.5" fill="currentColor" stroke="rgba(0,0,0,.2)" stroke-width="1.4"/>'
+    + '<polygon points="40.5,14.5 48,19 40.5,22.5" fill="#FF8A1E"/>'
+    + '<circle cx="34" cy="15" r="2.2" fill="#2b2140"/>'
+    + '<ellipse cx="19" cy="31" rx="7" ry="5" fill="rgba(0,0,0,.13)"/></svg>';
+}
+
+function wishText(w){
+  if(w.t === "num")  return "나는 " + w.v + "번 자리에 앉고 싶어!";
+  if(w.t === "odd")  return "나는 홀수 자리(1 &middot; 3 &middot; 5 &middot; 7)에 앉고 싶어!";
+  if(w.t === "even") return "나는 짝수 자리(2 &middot; 4 &middot; 6 &middot; 8)에 앉고 싶어!";
+  if(w.t === "next") return "나는 " + BIRDS[w.v].n + " 새 <b>옆에</b> 앉고 싶어!";
+  if(w.t === "opp")  return "나는 " + BIRDS[w.v].n + " 새와 <b>마주보고</b> 싶어!";
+  if(w.t === "away") return "나는 " + BIRDS[w.v].n + " 새와 <b>떨어져</b> 앉고 싶어!";
+  return "";
+}
+
+function dist(a, b){
+  var d1 = (a - b + 8) % 8;
+  var d2 = (b - a + 8) % 8;
+  return d1 < d2 ? d1 : d2;
+}
+
+function evalWish(w, pos){
+  var s = pos[w.bird];
+  if(s === null || s === undefined) return false;
+  var num = s + 1;
+  if(w.t === "num")  return num === w.v;
+  if(w.t === "odd")  return num % 2 === 1;
+  if(w.t === "even") return num % 2 === 0;
+  var o = pos[w.v];
+  if(o === null || o === undefined) return false;
+  var d = dist(s, o);
+  if(w.t === "next") return d === 1;
+  if(w.t === "opp")  return d === 4;
+  if(w.t === "away") return d >= 2;
+  return false;
+}
+
+/* =========================================================
+   화면 전환
+   ========================================================= */
+var SECTIONS = ["home","tutor","rules","practice","teacher"];
+function show(id){
+  for(var i=0;i<SECTIONS.length;i++){
+    document.getElementById(SECTIONS[i]).classList.add("hide");
+  }
+  document.getElementById(id).classList.remove("hide");
+  window.scrollTo(0,0);
+}
+function toast(msg){
+  var t = document.getElementById("toast");
+  t.innerHTML = msg;
+  t.classList.add("on");
+  clearTimeout(t._tm);
+  t._tm = setTimeout(function(){ t.classList.remove("on"); }, 1600);
+}
+
+/* =========================================================
+   보드 만들기
+   ========================================================= */
+function makeBoard(onSeat){
+  var el = document.createElement("div");
+  el.className = "board";
+  var rock = document.createElement("div");
+  rock.className = "rock";
+  rock.innerHTML = "울루루<br>바위";
+  el.appendChild(rock);
+  var seats = [];
+  for(var i=0;i<8;i++){
+    var a = (i/8) * Math.PI * 2 - Math.PI/2;
+    var s = document.createElement("button");
+    s.type = "button";
+    s.className = "seat";
+    s.style.left = (50 + Math.cos(a) * 41) + "%";
+    s.style.top  = (50 + Math.sin(a) * 41) + "%";
+    s.innerHTML = '<span class="num">' + (i+1) + '</span><span class="slot"></span>';
+    s.setAttribute("aria-label", (i+1) + "번 자리");
+    (function(idx, btn){
+      btn.addEventListener("click", function(){ onSeat(idx, btn); });
+    })(i, s);
+    el.appendChild(s);
+    seats.push(s);
+  }
+  return { el: el, seats: seats };
+}
+
+/* =========================================================
+   3단계 : 자리 퀴즈
+   ========================================================= */
+var SQ = (function(){
+  var TASKS = [
+    { title: "빨강 새의 <b>옆자리</b> 2곳을 모두 눌러요",
+      sub: "빨강 새는 3번 자리에 앉아 있어요.",
+      ans: [1,3],
+      why: "맞아요! 3번의 옆자리는 바로 붙어 있는 2번과 4번이에요." },
+    { title: "빨강 새와 <b>마주보는 자리</b>를 눌러요",
+      sub: "바위 건너편 정반대 칸이에요. 3 + 4 = ?",
+      ans: [6],
+      why: "정답! 3번 + 4 = 7번 자리가 마주보는 자리예요." },
+    { title: "<b>홀수 자리</b>를 모두 눌러요 (4곳)",
+      sub: "홀수는 1, 3, 5, 7이에요.",
+      ans: [0,2,4,6],
+      why: "훌륭해요! 홀수 자리는 1 · 3 · 5 · 7번이에요." }
+  ];
+  var FIXED = 2;              // 빨강 새 = 3번 자리(index 2)
+  var idx = 0, found = [], board = null;
+
+  function paint(){
+    var t = TASKS[idx];
+    document.getElementById("sqTitle").innerHTML = "&#10067; " + t.title;
+    document.getElementById("sqSub").innerHTML = t.sub;
+    for(var i=0;i<8;i++){
+      var s = board.seats[i];
+      s.className = "seat";
+      s.querySelector(".slot").innerHTML = (i === FIXED) ? birdSvg("red") : "";
+      if(i === FIXED) s.classList.add("filled");
+      if(found.indexOf(i) >= 0) s.classList.add("ok");
+    }
+  }
+  function tap(i, btn){
+    var t = TASKS[idx];
+    var fb = document.getElementById("sqFb");
+    if(t.ans.indexOf(i) < 0){
+      btn.classList.add("bad");
+      setTimeout(function(){ btn.classList.remove("bad"); }, 700);
+      toast("&#128533; 그 자리는 아니에요. 다시!");
+      return;
+    }
+    if(found.indexOf(i) >= 0) return;
+    found.push(i);
+    paint();
+    if(found.length === t.ans.length){
+      fb.className = "fb good";
+      fb.innerHTML = "&#127881; " + t.why;
+      if(idx < TASKS.length - 1){
+        setTimeout(function(){
+          idx++; found = [];
+          fb.classList.add("hide");
+          paint();
+        }, 1500);
+      } else {
+        fb.innerHTML = "&#127881; " + t.why + "<br>자리 말을 모두 익혔어요! 다음으로 가요.";
+      }
+    } else {
+      toast("&#128076; 좋아요! " + (t.ans.length - found.length) + "곳 더!");
+    }
+  }
+  return {
+    init: function(){
+      board = makeBoard(tap);
+      var host = document.getElementById("sqBoard");
+      host.innerHTML = "";
+      host.appendChild(board.el);
+      paint();
+    },
+    reset: function(){
+      idx = 0; found = [];
+      document.getElementById("sqFb").classList.add("hide");
+      paint();
+    }
+  };
+})();
+
+/* =========================================================
+   새 놓기 판 (연습 공용)
+   ========================================================= */
+function makePlacer(hostId, cfg){
+  var host = document.getElementById(hostId);
+  host.innerHTML = "";
+
+  var pos = {};
+  for(var i=0;i<cfg.birds.length;i++) pos[cfg.birds[i]] = null;
+  var sel = null;      // {bird:id, from:"nest"|"seat"}
+  var locked = false;
+  var timer = null;
+
+  var wrapW = document.createElement("div");
+  wrapW.className = "card";
+  wrapW.innerHTML = '<h3>&#127183; 이번 소원카드</h3><div class="wishlist"></div>';
+  var wishBox = wrapW.querySelector(".wishlist");
+
+  var wrapB = document.createElement("div");
+  wrapB.className = "card";
+
+  var timeBox = document.createElement("div");
+  if(cfg.timer){
+    timeBox.innerHTML =
+      '<div class="timeline"><span>&#8987;</span><span class="tnum">' + cfg.timer + '초</span>'
+      + '<button class="btn org" style="width:auto;min-height:44px;font-size:15px;padding:6px 14px">시간 재기 시작</button></div>'
+      + '<div class="glass"><i></i></div>';
+    wrapB.appendChild(timeBox);
+  }
+
+  var board = makeBoard(onSeat);
+  wrapB.appendChild(board.el);
+
+  var nest = document.createElement("div");
+  nest.className = "nest";
+  nest.innerHTML = '<h3>&#127796; 둥지 (새를 눌러 고르세요)</h3><div class="tray"></div>';
+  wrapB.appendChild(nest);
+  var tray = nest.querySelector(".tray");
+
+  var btns = document.createElement("div");
+  btns.className = "row";
+  btns.innerHTML =
+      '<button class="btn green bCheck">&#9989; 확인하기</button>'
+    + '<button class="btn ghost bReset">&#128260; 다시 놓기</button>';
+  wrapB.appendChild(btns);
+
+  var res = document.createElement("div");
+  res.setAttribute("aria-live", "polite");
+  wrapB.appendChild(res);
+
+  host.appendChild(wrapW);
+  host.appendChild(wrapB);
+
+  btns.querySelector(".bCheck").addEventListener("click", function(){ check(false); });
+  btns.querySelector(".bReset").addEventListener("click", reset);
+  if(cfg.timer){
+    timeBox.querySelector("button").addEventListener("click", startTimer);
+  }
+
+  function birdAt(seat){
+    for(var k in pos){ if(pos[k] === seat) return k; }
+    return null;
+  }
+
+  function onSeat(i, btn){
+    if(locked) return;
+    var occ = birdAt(i);
+    if(sel){
+      if(occ === sel.bird){ sel = null; paint(); return; }
+      var from = pos[sel.bird];
+      pos[sel.bird] = i;
+      if(occ !== null){
+        pos[occ] = (sel.from === "seat") ? from : null;   // 자리 교체 또는 둥지로
+      }
+      sel = null;
+      btn.classList.add("anim");
+      paint();
+      return;
+    }
+    if(occ !== null){
+      sel = { bird: occ, from: "seat" };
+      paint();
+      toast("&#128038; " + BIRDS[occ].n + " 새를 들었어요. 앉힐 자리를 누르세요.");
+    } else {
+      toast("&#128071; 먼저 둥지에서 새를 골라요!");
+    }
+  }
+
+  function onChip(id){
+    if(locked) return;
+    if(pos[id] !== null){            // 이미 앉은 새 → 둥지로 돌려보내기
+      pos[id] = null;
+      sel = null;
+      paint();
+      toast("&#127796; " + BIRDS[id].n + " 새가 둥지로 돌아왔어요.");
+      return;
+    }
+    sel = (sel && sel.bird === id) ? null : { bird: id, from: "nest" };
+    paint();
+  }
+
+  function paint(marks){
+    for(var i=0;i<8;i++){
+      var s = board.seats[i];
+      var cls = "seat";
+      var b = birdAt(i);
+      s.querySelector(".slot").innerHTML = b ? birdSvg(b) : "";
+      if(b) cls += " filled";
+      if(b && sel && sel.bird === b) cls += " pick";
+      if(marks && b && marks[b] !== undefined) cls += marks[b] ? " ok" : " bad";
+      s.className = cls;
+      var old = s.querySelector(".mk");
+      if(old) old.parentNode.removeChild(old);
+      if(marks && b && marks[b] !== undefined){
+        var m = document.createElement("span");
+        m.className = "mk";
+        m.innerHTML = marks[b] ? "&#11093;" : "&#10060;";
+        m.style.color = marks[b] ? "#2ecc71" : "#ff5a5f";
+        s.appendChild(m);
+      }
+    }
+    tray.innerHTML = "";
+    for(var j=0;j<cfg.birds.length;j++){
+      var id = cfg.birds[j];
+      var c = document.createElement("button");
+      c.type = "button";
+      c.className = "chip" + (pos[id] !== null ? " used" : "") + (sel && sel.bird === id && sel.from === "nest" ? " sel" : "");
+      c.innerHTML = birdSvg(id) + "<span>" + BIRDS[id].n + "</span>";
+      (function(bid){ c.addEventListener("click", function(){ onChip(bid); }); })(id);
+      tray.appendChild(c);
+    }
+    wishBox.innerHTML = "";
+    for(var w=0;w<cfg.wishes.length;w++){
+      var ws = cfg.wishes[w];
+      var row = document.createElement("div");
+      var st = "";
+      var mk = "";
+      if(marks && marks[ws.bird] !== undefined){
+        st = marks[ws.bird] ? " ok" : " bad";
+        mk = marks[ws.bird] ? "&#11093;" : "&#10060;";
+      }
+      row.className = "wish" + st;
+      row.innerHTML = birdSvg(ws.bird) + '<span class="tx">' + wishText(ws) + '</span><span class="mk">' + mk + "</span>";
+      wishBox.appendChild(row);
+    }
+  }
+
+  function check(auto){
+    var marks = {};
+    var fail = 0, notPlaced = 0;
+    for(var i=0;i<cfg.wishes.length;i++){
+      var w = cfg.wishes[i];
+      var ok = evalWish(w, pos);
+      marks[w.bird] = ok;
+      if(!ok) fail++;
+      if(pos[w.bird] === null || pos[w.bird] === undefined) notPlaced++;
+    }
+    var total = fail + notPlaced;
+    paint(marks);
+    stopTimer();
+    if(total === 0){
+      res.className = "result good";
+      res.innerHTML = "&#127881; 벌점 <b>0점</b>! 모든 소원을 들어줬어요. 최고예요!"
+        + (auto ? "<br>시간 안에 성공!" : "");
+      if(cfg.onWin) cfg.onWin();
+    } else {
+      res.className = "result so";
+      res.innerHTML = "벌점 <b>" + total + "점</b>&nbsp; (소원 실패 " + fail + "점"
+        + (notPlaced ? " + 못 놓은 새 " + notPlaced + "점" : "") + ")"
+        + "<br><span class='muted'>&#10060; 표시된 새의 소원을 다시 읽어 보고, 자리를 바꿔 보세요!</span>";
+    }
+  }
+
+  function reset(){
+    for(var k in pos) pos[k] = null;
+    sel = null; locked = false;
+    res.className = "";
+    res.innerHTML = "";
+    stopTimer();
+    if(cfg.timer){
+      timeBox.querySelector(".tnum").innerHTML = cfg.timer + "초";
+      timeBox.querySelector(".glass > i").style.width = "100%";
+      timeBox.querySelector("button").innerHTML = "시간 재기 시작";
+    }
+    paint();
+  }
+
+  function startTimer(){
+    stopTimer();
+    var left = cfg.timer;
+    timeBox.querySelector("button").innerHTML = "다시 시작";
+    timer = setInterval(function(){
+      left--;
+      timeBox.querySelector(".tnum").innerHTML = left + "초";
+      timeBox.querySelector(".glass > i").style.width = (left / cfg.timer * 100) + "%";
+      if(left <= 0){
+        stopTimer();
+        locked = true;
+        check(true);
+      }
+    }, 1000);
+  }
+  function stopTimer(){
+    if(timer){ clearInterval(timer); timer = null; }
+  }
+
+  paint();
+  return { reset: reset };
+}
+
+/* =========================================================
+   퀴즈
+   ========================================================= */
+var quizDone = {}, quizRight = 0, quizTotal = 0;
+
+function makeQuiz(hostId, list){
+  var host = document.getElementById(hostId);
+  host.innerHTML = "";
+  for(var i=0;i<list.length;i++){
+    (function(q, qi){
+      quizTotal++;
+      var box = document.createElement("div");
+      box.className = "quiz";
+      box.innerHTML = '<div class="q">&#10067; ' + q.q + "</div>";
+      var fb = document.createElement("div");
+      fb.className = "fb hide";
+      var opts = [];
+      for(var j=0;j<q.opts.length;j++){
+        (function(oi){
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "opt";
+          b.innerHTML = q.opts[oi];
+          b.addEventListener("click", function(){
+            var key = hostId + "-" + qi;
+            if(oi === q.a){
+              b.classList.add("correct");
+              fb.className = "fb good";
+              fb.innerHTML = "&#11093; 정답! " + q.why;
+              for(var m=0;m<opts.length;m++) opts[m].disabled = true;
+              if(!quizDone[key]){ quizDone[key] = true; quizRight++; }
+              updateScore();
+            } else {
+              b.classList.add("wrong");
+              b.disabled = true;
+              fb.className = "fb nope";
+              fb.innerHTML = "&#10060; 다시 생각해 볼까요? " + (q.hint || "");
+              quizDone[key] = quizDone[key] || false;
+            }
+          });
+          opts.push(b);
+          box.appendChild(b);
+        })(j);
+      }
+      box.appendChild(fb);
+      host.appendChild(box);
+    })(list[i], i);
+  }
+}
+
+function updateScore(){
+  var el = document.getElementById("finalScore");
+  if(!el) return;
+  el.innerHTML = quizRight + " / " + quizTotal;
+  var msg = document.getElementById("finalMsg");
+  if(quizRight === quizTotal) msg.innerHTML = "&#127942; 모두 맞혔어요! 이제 진짜 게임을 할 수 있어요.";
+  else if(quizRight >= quizTotal - 1) msg.innerHTML = "&#128077; 아주 잘했어요!";
+  else msg.innerHTML = "&#128170; 잘하고 있어요. 더 풀어 볼까요?";
+}
+
+/* =========================================================
+   퀴즈 문제
+   ========================================================= */
+var QUIZ_CARDS = [
+  { q: "파랑 새의 카드에 <b>&lsquo;노랑 새 옆에 앉고 싶어&rsquo;</b> 라고 적혀 있어요. 어떻게 해야 할까요?",
+    opts: ["파랑 새를 노랑 새의 바로 옆 칸에 앉힌다",
+           "파랑 새를 노랑 새와 마주보게 앉힌다",
+           "파랑 새를 둥지에 그냥 둔다"],
+    a: 0,
+    why: "옆자리는 바로 붙어 있는 칸이에요. 왼쪽, 오른쪽 둘 중 어디든 괜찮아요.",
+    hint: "&lsquo;옆&rsquo;은 바로 붙어 있다는 뜻이에요." },
+  { q: "빨강 새가 <b>4번 자리</b>에 앉았어요. 빨강 새와 <b>마주보는 자리</b>는 몇 번일까요?",
+    opts: ["1번", "6번", "8번", "2번"],
+    a: 2,
+    why: "4 + 4 = 8. 마주보는 자리는 번호에 4를 더하면 돼요.",
+    hint: "번호에 4를 더해 보세요." },
+  { q: "노랑 새의 소원은 <b>&lsquo;홀수 자리&rsquo;</b>인데, 노랑 새를 <b>6번</b> 자리에 앉혔어요. 소원이 이루어졌나요?",
+    opts: ["아니요, 6은 짝수예요", "네, 이루어졌어요"],
+    a: 0,
+    why: "6은 짝수라서 소원 실패! 벌점 1점을 받아요.",
+    hint: "6은 홀수일까요, 짝수일까요?" },
+  { q: "초록 새의 소원은 <b>&lsquo;보라 새와 떨어져 앉기&rsquo;</b>예요. 어떤 자리가 안 될까요?",
+    opts: ["보라 새의 바로 옆자리", "보라 새와 마주보는 자리", "보라 새에서 두 칸 떨어진 자리"],
+    a: 0,
+    why: "&lsquo;떨어져 앉기&rsquo;는 옆자리에 앉지 않는 것이에요. 두 칸 이상 떨어지면 돼요.",
+    hint: "붙어 있으면 떨어진 게 아니죠!" }
+];
+
+var QUIZ_SCORE = [
+  { q: "소원을 이루지 못한 새가 <b>3마리</b>예요. 벌점은 몇 점일까요?",
+    opts: ["1점", "3점", "6점"],
+    a: 1,
+    why: "새 한 마리마다 1점이니까 3마리는 3점이에요.",
+    hint: "한 마리에 1점씩이에요." },
+  { q: "모래시계가 끝났는데 새 <b>1마리</b>를 아직 못 놓았어요. 그 새의 벌점은?",
+    opts: ["0점", "1점", "2점"],
+    a: 2,
+    why: "못 놓아서 1점, 소원도 못 이뤘으니 1점. 모두 합쳐 2점이에요.",
+    hint: "못 놓으면 소원도 이룰 수 없어요." },
+  { q: "6라운드가 끝났어요. 민수 7점, 지유 5점, 하준 9점. 누가 이겼을까요?",
+    opts: ["하준 (9점)", "민수 (7점)", "지유 (5점)"],
+    a: 2,
+    why: "울루루는 벌점이 <b>가장 적은</b> 사람이 1등이에요!",
+    hint: "벌점은 적을수록 좋아요." }
+];
+
+/* =========================================================
+   튜토리얼 진행
+   ========================================================= */
+var steps, cur = 0;
+
+function startTutor(){
+  show("tutor");
+  cur = 0;
+  render();
+}
+function go(d){
+  var n = cur + d;
+  if(n < 0) { show("home"); return; }
+  if(n >= steps.length){ show("home"); return; }
+  cur = n;
+  render();
+}
+function render(){
+  for(var i=0;i<steps.length;i++){
+    if(i === cur) steps[i].classList.remove("hide");
+    else steps[i].classList.add("hide");
+  }
+  document.getElementById("pnum").innerHTML = (cur + 1);
+  document.getElementById("pbar").style.width = ((cur + 1) / steps.length * 100) + "%";
+  document.getElementById("nextBtn").innerHTML = (cur === steps.length - 1) ? "&#127968; 끝내기" : "다음 &#9654;";
+  document.getElementById("prevBtn").innerHTML = (cur === 0) ? "&#127968; 홈" : "&#9664; 이전";
+  window.scrollTo(0,0);
+}
+
+/* =========================================================
+   실전 연습 - 문제 자동 만들기
+   ========================================================= */
+function shuffle(a){
+  for(var i=a.length-1;i>0;i--){
+    var j = Math.floor(Math.random() * (i+1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function newGame(level){
+  var count = (level === "hard") ? 6 : 4;
+  var birds = shuffle(ORDER.slice()).slice(0, count);
+  var seats = shuffle([0,1,2,3,4,5,6,7]).slice(0, count);   // 정답이 되는 배치
+  var sol = {};
+  for(var i=0;i<count;i++) sol[birds[i]] = seats[i];
+
+  var wishes = [];
+  for(var k=0;k<count;k++){
+    var me = birds[k];
+    var others = birds.filter(function(b){ return b !== me; });
+    var kinds = ["num", "odd", "even", "next", "opp", "away"];
+    shuffle(kinds);
+    var made = null;
+    for(var t=0;t<kinds.length && !made;t++){
+      var kind = kinds[t];
+      var cand = null;
+      if(kind === "num")  cand = { bird: me, t: "num", v: sol[me] + 1 };
+      if(kind === "odd" && (sol[me] + 1) % 2 === 1) cand = { bird: me, t: "odd" };
+      if(kind === "even" && (sol[me] + 1) % 2 === 0) cand = { bird: me, t: "even" };
+      if(kind === "next" || kind === "opp" || kind === "away"){
+        var fit = others.filter(function(o){
+          var d = dist(sol[me], sol[o]);
+          if(kind === "next") return d === 1;
+          if(kind === "opp")  return d === 4;
+          return d >= 2;
+        });
+        if(fit.length) cand = { bird: me, t: kind, v: shuffle(fit)[0] };
+      }
+      if(cand && evalWish(cand, sol)) made = cand;
+    }
+    if(!made) made = { bird: me, t: "num", v: sol[me] + 1 };
+    wishes.push(made);
+  }
+
+  makePlacer("prac3", { birds: birds, wishes: wishes, timer: 90 });
+  toast("&#127183; 새 문제가 나왔어요!");
+  setTimeout(function(){
+    document.getElementById("prac3").scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 150);
+}
+
+/* =========================================================
+   시작 세팅
+   ========================================================= */
+(function init(){
+  steps = document.querySelectorAll("#tutor .step");
+
+  // 2단계 새 소개
+  var bs = document.getElementById("birdShow");
+  for(var i=0;i<ORDER.length;i++){
+    var d = document.createElement("div");
+    d.className = "chip";
+    d.innerHTML = birdSvg(ORDER[i]) + "<span>" + BIRDS[ORDER[i]].n + "</span>";
+    bs.appendChild(d);
+  }
+
+  // 4단계 소원 종류 샘플
+  var samples = [
+    { bird: "red", t: "num",  v: 5 },
+    { bird: "blu", t: "next", v: "yel" },
+    { bird: "grn", t: "opp",  v: "pnk" },
+    { bird: "pur", t: "away", v: "org" },
+    { bird: "sky", t: "odd" }
+  ];
+  var hosts = ["wishKinds", "wishKinds2"];
+  for(var h=0;h<hosts.length;h++){
+    var box = document.getElementById(hosts[h]);
+    for(var s=0;s<samples.length;s++){
+      var row = document.createElement("div");
+      row.className = "wish";
+      row.innerHTML = birdSvg(samples[s].bird) + '<span class="tx">' + wishText(samples[s]) + "</span>";
+      box.appendChild(row);
+    }
+  }
+
+  SQ.init();
+  makeQuiz("quizCards", QUIZ_CARDS);
+  makeQuiz("quizScore", QUIZ_SCORE);
+
+  // 5단계 연습 (새 3마리)
+  makePlacer("prac1", {
+    birds: ["red","blu","yel"],
+    wishes: [
+      { bird: "red", t: "num",  v: 3 },
+      { bird: "blu", t: "next", v: "red" },
+      { bird: "yel", t: "opp",  v: "red" }
+    ]
+  });
+
+  // 7단계 실전 (새 5마리 + 모래시계)
+  makePlacer("prac2", {
+    birds: ["red","org","grn","sky","pur"],
+    wishes: [
+      { bird: "red", t: "num",  v: 2 },
+      { bird: "org", t: "next", v: "red" },
+      { bird: "grn", t: "odd" },
+      { bird: "sky", t: "opp",  v: "grn" },
+      { bird: "pur", t: "away", v: "red" }
+    ],
+    timer: 90
+  });
+
+  newGame("easy");
+  updateScore();
+  render();
+})();
+</script>
+</body>
+</html>
